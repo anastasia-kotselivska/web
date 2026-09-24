@@ -79,7 +79,7 @@ function triangle(element1, type1, element2, type2) {
         alpha = 90 - beta;
 
         b = a * Math.tan(beta * Math.PI / 180);
-        c = a / Math.cos(beta * Math.PI / 180);
+        c = Math.sqrt(a * a + b * b);
     }
 // 5. Катет і протилежний кут
     else if ((type1 === "leg" && type2 === "opposite angle") || (type1 === "opposite angle" && type2 === "leg")) {
@@ -98,9 +98,8 @@ function triangle(element1, type1, element2, type2) {
         }
 
         beta = 90 - alpha;
-
-        c = a / Math.sin(alpha * Math.PI / 180);
         b = a / Math.tan(alpha * Math.PI / 180);
+        c = Math.sqrt(a * a + b * b);
     }
 else{
         console.log("Введено несумісну пару типів, перечитайте інструкцію!");
