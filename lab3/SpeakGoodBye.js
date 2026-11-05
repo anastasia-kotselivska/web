@@ -8,5 +8,5 @@
   SpeakGoodBye.speakRainy = function (name, vowelsCount) {
     console.log("Дощить, " + name + ", візьми парасольку! (Голосних: " + vowelsCount + ")");
   };
-
+  window.SpeakGoodBye = SpeakGoodBye;
 })(window);
