@@ -9,5 +9,5 @@
   SpeakHello.speakSunny = function (name, vowelsCount) {
     console.log("Сонячно, " + name + ", чудова погода! (Голосних: " + vowelsCount + ")");
   };
-
+  window.SpeakHello = SpeakHello;
 })(window);
