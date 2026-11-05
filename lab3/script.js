@@ -26,9 +26,9 @@ var vowelsArray = ['a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'];
 
     // Якщо кількість голосних парна — сонячно, якщо непарна — дощить
     if (vowelsCount % 2 === 0) {
-      helloSpeaker.speakSunny(name, vowelsCount);
+      SpeakHello.speakSunny(name, vowelsCount);
     } else {
-      byeSpeaker.speakRainy(name, vowelsCount);
+      SpeakGoodBye.speakRainy(name, vowelsCount);
     }
   }
 })();
