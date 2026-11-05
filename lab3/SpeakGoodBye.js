@@ -1,7 +1,12 @@
-var speakWord = "Good Bye";
+(function(window){
+  let SpeakGoodBye = {};
+  let speakWord = "Good Bye";
 
+  SpeakGoodBye.speak = function (name) {
+    console.log(speakWord  + " " + name);
+  };
+  SpeakGoodBye.speakRainy = function (name, vowelsCount) {
+    console.log("Дощить, " + name + ", візьми парасольку! (Голосних: " + vowelsCount + ")");
+  };
 
-function speak(name) {
-  console.log(speakWord + " " + name);
-}
-
+})(window);
