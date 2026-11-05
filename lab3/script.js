@@ -10,7 +10,6 @@ for (let i = 0; i < names.length; i++ ) {
       SpeakHello.speak(names[i]);
     }
 }
-
 var vowelsArray = ['a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'];
 
   for (var k = 0; k < names.length; k++) {
