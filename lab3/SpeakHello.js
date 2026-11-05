@@ -1,7 +1,13 @@
-var speakWord = "Hello";
+(function(window){
 
+  let SpeakHello = {};
+  let speakWord = "Hello";
 
-function speak(name) {
-  console.log(speakWord + " " + name);
-}
+  SpeakHello.speak = function (name) {
+    console.log(speakWord  + " " + name);
+  };
+  SpeakHello.speakSunny = function (name, vowelsCount) {
+    console.log("Сонячно, " + name + ", чудова погода! (Голосних: " + vowelsCount + ")");
+  };
 
+})(window);
