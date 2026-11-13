@@ -1,1 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel Hunt</title>
+    <style>
+        body {
+            font-family: "Times New Roman", Times, serif;
+            margin: 20px;
+            overflow: hidden;
+            user-select: none;
+        }
 
+        h1 {
+            text-align: center;
+            font-size: 36px;
+            margin-top: 10px;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+        }
+
+        select, button {
+            font-size: 16px;
+            padding: 2px 6px;
+        }
+
+        #game-info {
+            display: none;
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+        #target {
+            display: none;
+            position: absolute;
+            cursor: pointer;
+            border: 1px solid rgba(0, 0, 0, 0.2); /* Легка рамка, щоб було видно світлі кольори */
+        }
+    </style>
+</head>
+<body>
+
+    <div id="setup-screen">
+        <h1>Pixel Hunt</h1>
+        <div class="controls">
+            <label for="difficulty">Choose difficulty:</label>
+            <select id="difficulty">
+                <option value="">--Please choose an option--</option>
+                <option value="lazy">Lazy</option>
+                <option value="normal">Normal</option>
+                <option value="hard">Catch me if you can</option>
+            </select>
+
+            <label for="color">Choose color:</label>
+            <select id="color">
+                <option value="">--Please choose an option--</option>
+                <option value="#e53935">Red</option>
+                <option value="#2e7d32">Green</option>
+                <option value="#1e88e5">Blue</option>
+                <option value="#fdd835">Yellow</option>
+                <option value="#8e24aa">Purple</option>
+                <option value="#fb8c00">Orange</option>
+                <option value="#ec407a">Pink</option>
+                <option value="#00acc1">Cyan</option>
+                <option value="#212121">Black</option>
+                <option value="random">Random (every click)</option>
+            </select>
+
+            <button id="start-btn">Start</button>
+        </div>
+    </div>
+
+    <div id="game-info">
+        <div>score: <span id="score">0</span></div>
+        <div>time left for click: <span id="timer">0</span></div>
+    </div>
+
+    <div id="target"></div>
+
+    <script>
+        const setupScreen = document.getElementById('setup-screen');
+        const gameInfo = document.getElementById('game-info');
+        const difficultySelect = document.getElementById('difficulty');
+        const colorSelect = document.getElementById('color');
+        const startBtn = document.getElementById('start-btn');
+        
+        const scoreDisplay = document.getElementById('score');
+        const timerDisplay = document.getElementById('timer');
+        const target = document.getElementById('target');
+
+        const settings = {
+            lazy:   { time: 4, size: 70, radius: 150 },
+            normal: { time: 2, size: 50, radius: 300 },
+            hard:   { time: 1, size: 35, radius: null }
+        };
+
+        // Палітра для режиму Random
+        const colorPalette = [
+            '#e53935', '#2e7d32', '#1e88e5', '#fdd835', 
+            '#8e24aa', '#fb8c00', '#ec407a', '#00acc1', '#212121'
+        ];
+
+        let score = 0;
+        let timeLeft = 0;
+        let currentConfig = null;
+        let selectedColor = '';
+        let timerInterval = null;
+
+        function applyTargetColor() {
+            if (selectedColor === 'random') {
+                const randomIndex = Math.floor(Math.random() * colorPalette.length);
+                target.style.backgroundColor = colorPalette[randomIndex];
+            } else {
+                target.style.backgroundColor = selectedColor;
+            }
+        }
+
+        startBtn.addEventListener('click', () => {
+            const difficulty = difficultySelect.value;
+            selectedColor = colorSelect.value;
+
+            if (!difficulty || !selectedColor) {
+                alert('Please choose both difficulty and color!');
+                return;
+            }
+
+            currentConfig = settings[difficulty];
+            score = 0;
+            scoreDisplay.textContent = score;
+
+            applyTargetColor();
+            target.style.width = currentConfig.size + 'px';
+            target.style.height = currentConfig.size + 'px';
+
+            setupScreen.style.display = 'none';
+            gameInfo.style.display = 'block';
+            target.style.display = 'block';
+
+            const startX = (window.innerWidth - currentConfig.size) / 2;
+            const startY = (window.innerHeight - currentConfig.size) / 2;
+            target.style.left = startX + 'px';
+            target.style.top = startY + 'px';
+
+            startRound();
+        });
+
+        target.addEventListener('click', () => {
+            score++;
+            scoreDisplay.textContent = score;
+            if (selectedColor === 'random') {
+                applyTargetColor();
+            }
+            moveTarget();
+            startRound();
+        });
+
+        function moveTarget() {
+            const maxX = window.innerWidth - currentConfig.size;
+            const maxY = window.innerHeight - currentConfig.size;
+
+            let newX, newY;
+
+            if (currentConfig.radius === null) {
+                newX = Math.floor(Math.random() * maxX);
+                newY = Math.floor(Math.random() * maxY);
+            } else {
+                const currentX = parseFloat(target.style.left) || 0;
+                const currentY = parseFloat(target.style.top) || 0;
+
+                const offsetX = (Math.random() * 2 - 1) * currentConfig.radius;
+                const offsetY = (Math.random() * 2 - 1) * currentConfig.radius;
+
+                newX = Math.max(0, Math.min(maxX, currentX + offsetX));
+                newY = Math.max(0, Math.min(maxY, currentY + offsetY));
+            }
+
+            target.style.left = newX + 'px';
+            target.style.top = newY + 'px';
+        }
+
+        function startRound() {
+            clearInterval(timerInterval);
+            timeLeft = currentConfig.time;
+            timerDisplay.textContent = timeLeft;
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerDisplay.textContent = timeLeft;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    endGame();
+                }
+            }, 1000);
+        }
+
+        function endGame() {
+            alert(`Game over! Your score is ${score}. Congratulations!\nPlease, reload the page to start a new game.`);
+            target.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
