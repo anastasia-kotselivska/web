@@ -1,1 +1,101 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Салон краси «Лілея»</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="#" id="nav-catalog">Catalog</a>
+  </nav>
 
+  <main id="content">
+    <h1>Салон краси «Лілея»</h1>
+    <p>Стрижки, манікюр, догляд за шкірою та SPA. Оберіть послугу в каталозі.</p>
+  </main>
+
+  <script>
+    const content = document.getElementById('content');
+    const DATA_DIR = "";
+    let categories = null;
+
+    async function getJSON(url) {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error('Помилка ' + response.status + ': ' + url);
+      return response.json();
+    }
+
+    function el(tag, text, attrs = {}) {
+      const node = document.createElement(tag);
+      if (text) node.textContent = text;
+      Object.entries(attrs).forEach(([k, v]) => node.setAttribute(k, v));
+      return node;
+    }
+
+    async function loadCatalog() {
+      content.replaceChildren(el('p', 'Завантаження…'));
+      try {
+        if (!categories) categories = await getJSON(DATA_DIR + 'categories.json');
+        renderCatalog();
+      } catch (err) {
+        content.replaceChildren(el('p', 'Не вдалося завантажити каталог. ' + err.message));
+      }
+    }
+
+    function renderCatalog() {
+      const list = el('ul');
+      categories.forEach(cat => {
+        const a = el('a', cat.name, { href: '#' });
+        a.addEventListener('click', e => { e.preventDefault(); loadCategory(cat); });
+        const li = el('li');
+        li.append(a);
+        list.append(li);
+      });
+
+      const specials = el('a', 'Specials', { href: '#' });
+      specials.addEventListener('click', e => {
+        e.preventDefault();
+        loadCategory(categories[Math.floor(Math.random() * categories.length)]);
+      });
+      const li = el('li');
+      li.append(specials);
+      list.append(li);
+
+      content.replaceChildren(el('h2', 'Каталог послуг'), list);
+    }
+
+    async function loadCategory(cat) {
+      content.replaceChildren(el('p', 'Завантаження…'));
+      try {
+        const data = await getJSON(DATA_DIR + cat.shortname + '.json');
+        renderCategory(data);
+      } catch (err) {
+        content.replaceChildren(el('p', 'Не вдалося завантажити категорію. ' + err.message));
+      }
+    }
+
+    function renderCategory(data) {
+      content.replaceChildren(el('h2', data.category));
+      data.items.forEach(item => {
+        const img = el('img', '', {
+          src: 'https://placehold.co/200x200/e9def0/6b3a7d?text=' + encodeURIComponent(item.shortname),
+          alt: item.name, width: 200, height: 200
+        });
+        const info = el('div');
+        info.append(el('h3', item.name), el('p', item.description), el('p', item.price + ' грн', { class: 'price' }));
+        const row = el('div', '', { class: 'item' });
+        row.append(img, info);
+        content.append(row);
+      });
+    }
+
+    document.getElementById('nav-catalog').addEventListener('click', e => {
+      e.preventDefault();
+      loadCatalog();
+    });
+  </script>
+</body>
+</html>
