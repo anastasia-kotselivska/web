@@ -1,0 +1,10 @@
+{
+  "category": "Догляд за обличчям",
+  "items": [
+    { "id": 301, "name": "Ультразвукова чистка", "shortname": "us-clean", "description": "Делікатне очищення пор без травмування шкіри.", "price": 800 },
+    { "id": 302, "name": "Хімічний пілінг", "shortname": "peeling", "description": "Оновлення шкіри та вирівнювання тону. Lorem ipsum.", "price": 1200 },
+    { "id": 303, "name": "Альгінатна маска", "shortname": "mask", "description": "Зволоження та охолодження, підходить для чутливої шкіри.", "price": 450 },
+    { "id": 304, "name": "Корекція брів", "shortname": "brows", "description": "Форма, фарбування хною або фарбою. Sed do eiusmod.", "price": 300 },
+    { "id": 305, "name": "Ламінування вій", "shortname": "lashes", "description": "Вигин, об'єм і догляд за віями на 6-8 тижнів.", "price": 850 }
+  ]
+}

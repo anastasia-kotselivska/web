@@ -1,0 +1,10 @@
+{
+  "category": "Манікюр та педикюр",
+  "items": [
+    { "id": 201, "name": "Класичний манікюр", "shortname": "classic-mani", "description": "Обрізний або апаратний манікюр без покриття.", "price": 350 },
+    { "id": 202, "name": "Манікюр із гель-лаком", "shortname": "gel-mani", "description": "Манікюр та стійке покриття на 3-4 тижні. Lorem ipsum.", "price": 550 },
+    { "id": 203, "name": "Нарощування нігтів", "shortname": "extension", "description": "Моделювання форми та довжини гелем або акрилом.", "price": 1100 },
+    { "id": 204, "name": "Педикюр", "shortname": "pedicure", "description": "Комплексний догляд за стопами та нігтями. Dolor sit amet.", "price": 700 },
+    { "id": 205, "name": "Дизайн нігтів", "shortname": "nail-art", "description": "Малюнок, фольга, стрази — ціна за один палець.", "price": 40 }
+  ]
+}

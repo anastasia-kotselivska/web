@@ -1,0 +1,10 @@
+{
+  "category": "Масаж та SPA",
+  "items": [
+    { "id": 401, "name": "Класичний масаж спини", "shortname": "back-massage", "description": "Зняття напруги в м'язах спини та шиї, 30 хвилин.", "price": 500 },
+    { "id": 402, "name": "Антицелюлітний масаж", "shortname": "anticell", "description": "Моделювання контурів тіла. Lorem ipsum dolor.", "price": 700 },
+    { "id": 403, "name": "Обгортання водоростями", "shortname": "wrap", "description": "Детокс та підтяжка шкіри, 60 хвилин.", "price": 900 },
+    { "id": 404, "name": "Стоун-терапія", "shortname": "stone", "description": "Масаж гарячим камінням для глибокого розслаблення.", "price": 1100 },
+    { "id": 405, "name": "SPA-ритуал для двох", "shortname": "duo-spa", "description": "Масаж, пілінг та чайна церемонія. Ut enim ad minim.", "price": 2400 }
+  ]
+}

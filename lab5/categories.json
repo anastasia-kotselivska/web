@@ -1,0 +1,6 @@
+[
+  { "id": 1, "name": "Перукарські послуги", "shortname": "hair", "notes": "Lorem ipsum dolor sit amet, consectetur adipiscing elit." },
+  { "id": 2, "name": "Манікюр та педикюр", "shortname": "nails", "notes": "" },
+  { "id": 3, "name": "Догляд за обличчям", "shortname": "face", "notes": "Sed do eiusmod tempor incididunt ut labore." },
+  { "id": 4, "name": "Масаж та SPA", "shortname": "spa", "notes": "" }
+]

@@ -1,0 +1,10 @@
+{
+  "category": "Перукарські послуги",
+  "items": [
+    { "id": 101, "name": "Жіноча стрижка", "shortname": "women-cut", "description": "Стрижка з миттям голови та укладанням. Lorem ipsum dolor sit amet.", "price": 650 },
+    { "id": 102, "name": "Чоловіча стрижка", "shortname": "men-cut", "description": "Класична або сучасна стрижка, оформлення бороди за бажанням.", "price": 400 },
+    { "id": 103, "name": "Фарбування волосся", "shortname": "coloring", "description": "Однотонне фарбування професійною фарбою. Lorem ipsum.", "price": 1500 },
+    { "id": 104, "name": "Балаяж", "shortname": "balayage", "description": "М'який перехід кольору з ефектом вигорілих на сонці пасом.", "price": 3200 },
+    { "id": 105, "name": "Укладання на подію", "shortname": "styling", "description": "Вечірня або весільна зачіска. Consectetur adipiscing elit.", "price": 900 }
+  ]
+}
