@@ -81,7 +81,7 @@
       content.replaceChildren(el('h2', data.category));
       data.items.forEach(item => {
         const img = el('img', '', {
-          src: 'https://placehold.co/200x200/e9def0/6b3a7d?text=' + encodeURIComponent(item.shortname),
+          src: 'https://placehold.co/200x200/e9def0/6b3a7d.png?text=' + encodeURIComponent(item.shortname),
           alt: item.name, width: 200, height: 200
         });
         const info = el('div');
