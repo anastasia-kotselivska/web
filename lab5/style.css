@@ -1,0 +1,10 @@
+body { font-family: sans-serif; max-width: 800px; margin: 0 auto; padding: 1rem; background: #fbf7fc; color: #2b1f33; }
+nav { background: #6b3a7d; padding: .75rem 1rem; margin-bottom: 1.5rem; border-radius: 4px; }
+nav a { color: #fff; margin-right: 1.5rem; text-decoration: none; }
+nav a:hover { text-decoration: underline; }
+h1, h2 { color: #6b3a7d; }
+main a { color: #6b3a7d; }
+.item { display: flex; gap: 1rem; margin-bottom: 1rem; background: #fff; border: 1px solid #e0d2e8; border-radius: 4px; padding: .75rem; }
+.item img { width: 200px; height: 200px; }
+.item h3 { margin-top: 0; }
+.price { color: #b0407f; font-weight: bold; }
