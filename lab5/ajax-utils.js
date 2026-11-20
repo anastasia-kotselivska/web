@@ -1,4 +1,5 @@
 (function (global) {
+
   // Створюємо об'єкт ajaxUtils
   const ajaxUtils = {};
 
@@ -13,19 +14,20 @@
   }
 
   // Функція надсилання AJAX GET-запиту
-  ajaxUtils.sendGetRequest = function (requestUrl, responseHandler, isJsonResponse, errorHandler) {
+  ajaxUtils.sendGetRequest = function (requestUrl, responseHandler, isJsonResponse) {
+
     let request = getRequestObject();
+
     if (!request) {
       return;
     }
+
     // Відстеження зміни стану запиту
     request.onreadystatechange = function () {
-
       handleResponse(
         request,
         responseHandler,
-        isJsonResponse,
-        errorHandler
+        isJsonResponse
       );
     };
 
@@ -37,40 +39,32 @@
   };
 
   // Функція обробки відповіді сервера
-  function handleResponse( request, responseHandler, isJsonResponse, errorHandler) {
+  function handleResponse(request, responseHandler, isJsonResponse) {
+
     // Перевіряємо, чи завершено запит
     if (request.readyState === 4) {
+
       // Перевіряємо успішність запиту
       if (request.status === 200) {
+
         if (isJsonResponse === undefined) {
           isJsonResponse = true;
         }
-        try {
-          let response = request.responseText;
-          // Перетворюємо JSON-текст на об'єкт
-          if (isJsonResponse) {
-            response = JSON.parse(response);
-          }
-          // Передаємо результат обробнику
-          responseHandler(response);
-        } catch (error) {
-          if (errorHandler) {
-            errorHandler(error);
-          }
+
+        let response = request.responseText;
+
+        // Перетворюємо JSON-текст на об'єкт
+        if (isJsonResponse) {
+          response = JSON.parse(response);
         }
-      } else {
-        // Обробка помилки сервера
-        if (errorHandler) {
-          errorHandler(
-            new Error(
-              "Помилка сервера: " + request.status
-            )
-          );
-        }
+
+        // Передаємо результат обробнику
+        responseHandler(response);
       }
     }
   }
+
   // Робимо ajaxUtils доступним в інших файлах
   global.ajaxUtils = ajaxUtils;
-  
+
 })(window);
