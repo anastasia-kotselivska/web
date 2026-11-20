@@ -18,158 +18,143 @@
   </main>
   <script src="ajax-utils.js"></script>
   <script>
-    // Отримуємо основний блок сторінки
-    const content = document.getElementById('content');
-    // Шлях до JSON-файлів
-    const DATA_DIR = "";
-    // Змінна для збереження категорій
-    let categories = null;
-
-    // 1. Функція завантаження JSON через AJAX
-    function getJSON(url) {
-      return new Promise((resolve, reject) => {
-        ajaxUtils.sendGetRequest(
-          url,
-          function(data) {
-            resolve(data);
-          },
-          true,
-          function(error) {
-            reject(error);
-          }
-        );
-      });
+ 
+  const content = document.getElementById('content');
+  let categories = null;
+  
+  // Завантаження каталогу
+  function loadCatalog() {
+  
+    content.textContent = 'Завантаження...';
+  
+    if (categories) {
+      showCatalog();
+      return;
     }
-
-
-    // 2. Функція створення HTML-елементів
-    function el(tag, text, attrs = {}) {
-      const node = document.createElement(tag);
-      if (text) {
-        node.textContent = text;
-      }
-      Object.entries(attrs).forEach(([k, v]) => {
-        node.setAttribute(k, v);
-      });
-      return node;
-    }
-
-    // 3. Функція завантаження каталогу
-    async function loadCatalog() {
-      content.replaceChildren(
-        el('p', 'Завантаження…')
-      );
-      try {
-        if (!categories) {
-          categories = await getJSON(
-            DATA_DIR + 'categories.json'
-          );
-        }
-        renderCatalog();
-      } catch (err) {
-        content.replaceChildren(
-          el(
-            'p',
-            'Не вдалося завантажити каталог. ' + err.message
-          )
-        );
-      }
-    }
-    // 4. Функція відображення каталогу
-    function renderCatalog() {
-      const list = el('ul');
-      categories.forEach(cat => {
-        const a = el('a', cat.name, {
-          href: '#'
-        });
-        a.addEventListener('click', e => {
-          e.preventDefault();
-          loadCategory(cat);
-        });
-        const li = el('li');
-        li.append(a);
-        list.append(li);
-      });
-      // Випадковий вибір категорії Specials
-      const specials = el('a', 'Specials', {
-        href: '#'
-      });
-      specials.addEventListener('click', e => {
+  
+    ajaxUtils.sendGetRequest(
+      'categories.json',
+      function(data) {
+        categories = data;
+        showCatalog();
+      },
+      true
+    );
+  }
+  
+  // Відображення списку категорій
+  function showCatalog() {
+  
+    content.replaceChildren();
+  
+    const title = document.createElement('h2');
+    title.textContent = 'Каталог послуг';
+    content.append(title);
+  
+    const list = document.createElement('ul');
+  
+    categories.forEach(function(cat) {
+  
+      const li = document.createElement('li');
+      const link = document.createElement('a');
+  
+      link.href = '#';
+      link.textContent = cat.name;
+  
+      link.onclick = function(e) {
         e.preventDefault();
-        if (categories.length > 0) {
-          const randomIndex = Math.floor(
-            Math.random() * categories.length
-          );
-          loadCategory(categories[randomIndex]);
-        }
-      });
-      const li = el('li');
-      li.append(specials);
+        loadCategory(cat);
+      };
+  
+      li.append(link);
       list.append(li);
-      // Виводимо каталог на сторінку
-      content.replaceChildren(
-        el('h2', 'Каталог послуг'),
-        list
+    });
+  
+    // Випадкова категорія
+    const li = document.createElement('li');
+    const special = document.createElement('a');
+  
+    special.href = '#';
+    special.textContent = 'Specials';
+  
+    special.onclick = function(e) {
+      e.preventDefault();
+  
+      const index = Math.floor(
+        Math.random() * categories.length
       );
-    }
-    
-    // 5. Функція завантаження вибраної категорії
-    async function loadCategory(cat) {
-      content.replaceChildren(
-        el('p', 'Завантаження…')
-      );
-      try {
-        const data = await getJSON(
-          DATA_DIR + cat.shortname + '.json'
-        );
-        renderCategory(data);
-      } catch (err) {
-        content.replaceChildren(
-          el(
-            'p',
-            'Не вдалося завантажити категорію. ' + err.message
-          )
-        );
-      }
-    }
+  
+      loadCategory(categories[index]);
+    };
+  
+    li.append(special);
+    list.append(li);
+  
+    content.append(list);
+  }
+  
+  // Завантаження вибраної категорії
+  function loadCategory(cat) {
+  
+    content.textContent = 'Завантаження...';
+  
+    ajaxUtils.sendGetRequest(
+      cat.shortname + '.json',
+      function(data) {
+        showCategory(data);
+      },
+      true
+    );
+  }
+  
+  // Відображення послуг
+  function showCategory(data) {
+  
+    content.replaceChildren();
+  
+    const title = document.createElement('h2');
+    title.textContent = data.category;
+    content.append(title);
+  
+    data.items.forEach(function(item) {
+  
+      const div = document.createElement('div');
+      div.className = 'item';
+  
+      const img = document.createElement('img');
+  
+      img.src = 'https://placehold.co/200x200/e9def0/6b3a7d.png?text='
+        + encodeURIComponent(item.shortname);
+  
+      img.alt = item.name;
+      img.width = 200;
+      img.height = 200;
+  
+      const info = document.createElement('div');
+  
+      const name = document.createElement('h3');
+      name.textContent = item.name;
+  
+      const description = document.createElement('p');
+      description.textContent = item.description;
+  
+      const price = document.createElement('p');
+      price.textContent = item.price + ' грн';
+      price.className = 'price';
+  
+      info.append(name, description, price);
+      div.append(img, info);
+  
+      content.append(div);
+    });
+  }
+  
+  // Натискання Catalog
+  document.getElementById('nav-catalog').onclick = function(e) {
+    e.preventDefault();
+    loadCatalog();
+  };
 
-    // 6. Функція відображення послуг категорії
-    function renderCategory(data) {
-      content.replaceChildren(
-        el('h2', data.category)
-      );
-      data.items.forEach(item => {
-        // Створення зображення
-        const img = el('img', '', {
-          src: 'https://placehold.co/200x200/e9def0/6b3a7d.png?text='
-            + encodeURIComponent(item.shortname),
-          alt: item.name,
-          width: 200,
-          height: 200
-        });
-        // Блок з інформацією про послугу
-        const info = el('div');
-        info.append(
-          el('h3', item.name),
-          el('p', item.description),
-          el('p', item.price + ' грн', {
-            class: 'price'
-          })
-        );
-        // Загальний блок послуги
-        const row = el('div', '', {
-          class: 'item'
-        });
-        row.append(img, info);
-        content.append(row);
-      });
-    }
-    // 7. Обробник натискання Catalog
-    document.getElementById('nav-catalog')
-      .addEventListener('click', e => {
-        e.preventDefault();
-        loadCatalog();
-      });
   </script>
 </body>
 </html>
